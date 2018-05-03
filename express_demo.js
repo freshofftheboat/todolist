@@ -39,15 +39,6 @@ var sendJSON = (response, data) => {
 // response 是要发给浏览器的响应
 app.get('/', (request, response) => {
     var path = 'todo.html'
-    // var options = {
-    //     encoding: 'utf-8',
-    // }
-    // fs.readFile(path, options, (error, data) => {
-    //     log(`读取的 html 文件 ${path} 内容是`, data)
-    //     // 用 response.send 函数返回数据给浏览器
-    //     log('data type', typeof data)
-    //     response.send(data)
-    // })
     sendHtml(path, response)
 })
 
@@ -59,12 +50,9 @@ app.get('/todo/all', (requrest, response) => {
 
 var todoAdd = (form) => {
     log('form', form)
-    // 给新增的 todo 加上 id 属性
-    // 在 todoList.push 之前
-    // 如果 todoList.length 为 0
-    // todo 的 id 为 1
-    // 如果 todoList.length 大于 0
-    // todo 的 id 为 todoList 中最后一个元素的 id+1
+    // 在 todoList.push 之前，给新增的 todo 加上 id 属性
+    // 如果 todoList.length 为 0，todo 的 id 为 1
+    // 如果 todoList.length 大于 0，todo 的 id 为 todoList 中最后一个元素的 id+1
     if (todoList.length == 0) {
         form.id = 1
     } else {
@@ -97,9 +85,7 @@ var todoDelete = (id) => {
     }
     // 判断 index 来查看是否找到了相应的数据
     if (index > -1) {
-        // 找到了, 用 splice 函数删除
-        // splice 函数返回的是包含被删除元素的数组
-        // 所以要用 [0] 取出数据
+        // 找到了
         var t = todoList.splice(index, 1)[0]
         return t
     } else {
@@ -108,8 +94,7 @@ var todoDelete = (id) => {
     }
 }
 
-// delete 这个路由函数用了 动态路由 的概念
-// 其中 :id 是一个动态的变量
+// delete 使用 动态路由 的概念，其中 :id 是一个动态的变量
 // 它可以匹配如下的 url
 // /todo/delete/1
 // /todo/delete/2
@@ -118,7 +103,7 @@ var todoDelete = (id) => {
 // /todo/delete/error
 app.get('/todo/delete/:id', (request, response) => {
     // 动态路由的变量是通过 request.params.名字 的方式得到的
-    // 变量类型永远是 string
+    // 变量类型是 string
     var id = request.params.id
     // log('delete 路由', id, typeof id)
     var todo = todoDelete(id)
@@ -139,8 +124,7 @@ var todoComplete = (id, form) => {
     }
     // 判断 index 来查看是否找到了相应的数据
     if (index > -1) {
-        // 找到了, 用 splice 函数删除
-        // splice 函数返回的是包含被删除元素的数组
+        // 找到了
         var t = todoList[index].done = form.done
         return t
     } else {
@@ -150,11 +134,8 @@ var todoComplete = (id, form) => {
 }
 
 app.post('/todo/complete/:id', (request, response) => {
-    // 动态路由的变量是通过 request.params.名字 的方式得到的
-    // 变量类型永远是 string
     var id = request.params.id
     var form = request.body
-    // log('complete 路由', id, typeof id)
     var todo = todoComplete(id, form)
     sendJSON(response, todo)
 })
@@ -173,8 +154,7 @@ var todoUpdate = (id, form) => {
     }
     // 判断 index 来查看是否找到了相应的数据
     if (index > -1) {
-        // 找到了, 用 splice 函数删除
-        // splice 函数返回的是包含被删除元素的数组
+        // 找到了
         var t = todoList[index].task = form.task
         return t
     } else {
@@ -184,21 +164,15 @@ var todoUpdate = (id, form) => {
 }
 
 app.post('/todo/update/:id', (request, response) => {
-    // 动态路由的变量是通过 request.params.名字 的方式得到的
-    // 变量类型永远是 string
     var id = request.params.id
     var form = request.form
-    // log('update 路由', id, typeof id)
     var todo = todoUpdate(id, form)
     sendJSON(response, todo)
 })
 
 
-// listen 函数的第一个参数是我们要监听的端口
-// 这个端口是要浏览器输入的
+// listen 函数的第一个参数是要监听的端口
 // 默认的端口是 80
-// 所以如果你监听 80 端口的话，浏览器就不需要输入端口了
-// 但是 1024 以下的端口是系统保留端口，需要管理员权限才能使用
 var server = app.listen(8000, (...args) => {
     // log('server', args, args.length)
     var host = server.address().address
